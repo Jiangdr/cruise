@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 const Nav = () => import('@/components/nav/Index.vue');
 const Home = () => import('@/components/home/Index.vue');
+const Error = () => import('@/components/view/TheError.vue');
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
           component: Home,
         },
       ],
+    },
+    {
+      path: '*',
+      name: 'Error',
+      component: Error,
     },
   ]
 })

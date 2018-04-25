@@ -5,7 +5,7 @@
     <transition name="fade" mode="out-in">
       <keep-alive exclude="base-result">
         <component
-          is="the-agents"
+          :is="base.comp[base.select]"
           class='location'></component>
       </keep-alive>
     </transition>
@@ -36,7 +36,8 @@
     data() {
       return {
         base: {
-          select: 0
+          select: 2,
+          comp: ['the-error', 'the-error', 'the-agents', 'the-error'],
         },
       }
     },

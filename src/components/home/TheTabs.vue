@@ -75,7 +75,6 @@
   }
 
 
-
   //endregion
 
 </script>
@@ -87,6 +86,7 @@
   $trans: all .15s ease-in;
 
   .tabs {
+    border-bottom: 3px solid $borer;
   }
 
   .tab-ul {

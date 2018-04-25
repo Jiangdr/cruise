@@ -4,6 +4,7 @@
       <h6 class="fl">Agents</h6>
       <div class="btn-wrap fl">
         <button
+          type="button"
           v-for="(btn, idx) in ['All', 'Physical', 'Virtual']"
           :key="idx"
           class="button"
@@ -15,7 +16,7 @@
     <div class="wraper">
       <ul class="lists">
         <li
-          v-for="li in cp_agent"
+          v-for="(li, idx) in cp_agent"
           :key="li.id"
           :class="{physical: li.type === 'physical'}"
           class="list">
@@ -30,28 +31,71 @@
               <span class="tag">{{li.path}}</span>
             </div>
             <div class="clearFix res">
-              <a href="javaScript:;" class="btn tag"><i></i>Specify Resources</a>
+              <a @click="show = idx; addStr = ''" href="javaScript:;" class="btn tag"><i>+</i>Specify Resources</a>
               <ul class="res-ul">
-                <li
-                  class="res-item fl"
-                  v-for="sp in li.resources"
-                  :key="sp.id">{{sp.label}}
-                  <i>+</i>
-                </li>
+                <transition name="fade" mode="out-in">
+                  <li
+                    class="res-item fl" v-show="li.resources.length > 0">Resources:
+                  </li>
+                </transition>
+                <transition
+                  v-for="(sp, i) in li.resources"
+                  :key="sp.id"
+                  name="fade" mode="out-in">
+                  <li
+                    class="res-item fl btn"
+                    @click="deleteRes(li, sp.id, i)">{{sp.label}}
+                    <i class="iconfont">&#xe625;</i>
+                  </li>
+                </transition>
               </ul>
             </div>
           </div>
           <div class="author"><p>{{li.author}}</p></div>
-          <div class="dialog">
-            <span class="arrows"></span>
-            <p>111111111111</p>
-            <input type="text">
-            <button class="button">Add</button>
-            <button class="button">Close</button>
-          </div>
+          <transition name="fade" mode="out-in">
+            <div class="dialog" v-show="show === idx">
+              <span class="arrows"></span>
+              <p>(separate multiple resources name with commas)</p>
+              <input v-focus="show === idx" type="text" v-model="addStr">
+              <div class="btn-wrap">
+                <button type="button" class="button" @click="addResource(li)">Add resource</button>
+                <button type="button" class="button" @click="show = -1">Close</button>
+              </div>
+            </div>
+          </transition>
         </li>
       </ul>
-      <div class="aside-msg"></div>
+      <div class="aside-msg">
+        <h6 class="msg-title">Summary</h6>
+        <ul class="msg-item">
+          <li>
+            <span class="hand">dev</span>
+            <span>12</span>
+          </li>
+          <li>
+            <span class="hand">building</span>
+            <span>2</span>
+          </li>
+        </ul>
+        <h6 class="msg-title">History</h6>
+        <ul class="msg-item">
+          <li>
+            <span>bjstdmngber01</span>
+            <span>add</span>
+            <span>resources</span>
+          </li>
+          <li>
+            <span>bjstdmngber01</span>
+            <span>add</span>
+            <span>resources</span>
+          </li>
+          <li>
+            <span>bjstdmngber01</span>
+            <span>add</span>
+            <span>resources</span>
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 </template>
@@ -60,8 +104,7 @@
   /******************/
   /******************/
   //region    //import
-
-
+  import axios from 'axios'
   //endregion
 
   /******************/
@@ -78,101 +121,41 @@
   export default {
     data() {
       return {
-        agent: [
-          {
-            id: $randomId(15),
-            name: 'aaa',
-            img: '',
-            tag: 'building',
-            host: '0.0.0.0',
-            path: '/a/a/a',
-            author: 'derry',
-            type: 'physical',
-            resources: [
-              {
-                id: $randomId(16),
-                label: 'aaa',
-              },
-              {
-                id: $randomId(16),
-                label: '242424',
-              },
-              {
-                id: $randomId(16),
-                label: 'aaa',
-              },
-              {
-                id: $randomId(16),
-                label: '242424',
-              },
-              {
-                id: $randomId(16),
-                label: 'aaa',
-              },
-              {
-                id: $randomId(16),
-                label: '242424',
-              },
-              {
-                id: $randomId(16),
-                label: 'aaa',
-              },
-              {
-                id: $randomId(16),
-                label: '242424',
-              },
-            ],
-          },
-          {
-            id: $randomId(15),
-            name: 'aaa',
-            img: '',
-            tag: 'building',
-            host: '0.0.0.0',
-            path: '/a/a/a',
-            author: 'derry',
-            type: 'virtual',
-            resources: [
-              {
-                id: $randomId(16),
-                label: 'aaa',
-              },
-              {
-                id: $randomId(16),
-                label: '242424',
-              },
-              {
-                id: $randomId(16),
-                label: 'aaa',
-              },
-              {
-                id: $randomId(16),
-                label: '242424',
-              },
-              {
-                id: $randomId(16),
-                label: 'aaa',
-              },
-              {
-                id: $randomId(16),
-                label: '242424',
-              },
-              {
-                id: $randomId(16),
-                label: 'aaa',
-              },
-              {
-                id: $randomId(16),
-                label: '242424',
-              },
-            ],
-          },
-        ],
+        agent: [],
         type: 0,
+        show: -1,
+        addStr: '',
       }
     },
     mounted,
-    methods: {},
+    directives: {
+      focus: {
+        // 获取焦点指令
+        update: function (el, p) {
+          p.value && el.focus();
+        },
+      }
+    },
+    methods: {
+      addResource(obj) {
+        axios.post('http://127.0.0.1:8380/add', {
+          id: obj.id,
+          res: this.addStr,
+        }).then(({data}) => {
+          obj.resources.push(...data);
+          this.show = -1;
+        })
+
+      },
+      deleteRes(obj, id, idx) {
+        axios.post('http://127.0.0.1:8380/delete', {
+          pId: obj.id,
+          id: id,
+        }).then(({data}) => {
+          obj.resources.splice(idx, 1)
+        })
+      },
+    },
     computed: {
       cp_agent() {
         let base = {
@@ -180,7 +163,6 @@
           1: 'physical',
           2: 'virtual',
         }, type = base[this.type];
-        console.log(base);
         return this.agent.filter(itm => (itm.type === type || type === 'all'))
       },
     },
@@ -195,7 +177,9 @@
    *组件挂载成功执行函数
    */
   function mounted() {
-
+    axios.post('http://127.0.0.1:8380/agent', {id: 2}).then(({data}) => {
+      this.agent = data;
+    });
   }
 
   /**
@@ -233,10 +217,12 @@
 
   .sizer {
     background: $select;
-    border: 3px solid $borer;
+    border: 3px solid $borer {
+      top-color: $select;
+    }
     height: 50px;
-    color: #aaa;
-    line-height: 50px;
+    color: #ddd;
+    line-height: 44px;
     padding: 0 20px;
     h6 {
       font-size: 1.25rem;
@@ -252,7 +238,7 @@
       top-color: transparent;
     }
     position: relative;
-    top: -3px;
+    top: -6px;
     display: flex;
     width: 100%;
   }
@@ -260,7 +246,8 @@
   .lists {
     border-right: 2px solid $borer;
     padding: 20px;
-    flex: 1 1 auto;
+    flex-grow: 1;
+    transform-style: preserve-3d;
   }
 
   .list {
@@ -269,8 +256,8 @@
     border-radius: 10px;
     padding: 10px;
     display: flex;
-    animation: slide .2s ease-in-out forwards;
-    transform-origin: top;
+    /*animation: slide .2s ease-in-out forwards;*/
+    /*transform-origin: top;*/
     position: relative;
     &.physical {
       background: #fffbb9;
@@ -286,7 +273,7 @@
       div {
         width: 100%;
         height: 50px;
-        background: $select;
+        /*        background: $select;*/
         border-radius: 50%;
         overflow: hidden;
       }
@@ -325,6 +312,12 @@
 
     .res-item {
       padding: 0 15px;
+      &.btn {
+        cursor: pointer;
+        &:hover {
+          color: #888;
+        }
+      }
     }
 
     .author {
@@ -343,14 +336,81 @@
     }
 
     .dialog {
+      $border: #6e6e6e;
+      $bg: #e0edd5;
       position: absolute;
+      top: calc(100% + 15px);
+      left: 30px;
+      z-index: 3;
+      background: $bg;
+      border: 2px solid $border;
+      padding: 10px;
+      border-radius: 20px;
+
+      input {
+        width: 600px;
+        box-shadow: 0 0 5px rgba(50, 50, 150, .3) inset;
+        margin: 10px 0;
+        border: 1px solid $borer;
+        padding: 2px 20px;
+      }
+
+      .button {
+        background: #eee;
+        &:hover {
+          background: #aaa;
+        }
+        &:active {
+          background: #bbb;
+        }
+      }
+
+      .arrows {
+        display: block;
+        position: absolute;
+        bottom: 100%;
+        left: 40px;
+        width: 0;
+        height: 0;
+        border: 25px solid transparent {
+          bottom-color: $border;
+        }
+        &:before {
+          content: '';
+          display: table;
+          width: 0;
+          height: 0;
+          position: absolute;
+          bottom: -25px;
+          left: -22px;
+          border: 22px solid transparent {
+            bottom-color: $bg;
+          }
+        }
+      }
     }
   }
 
   .aside-msg {
     width: 280px;
-    height: 500px;
+    min-width: 280px;
     padding: 20px;
+
+    .msg-title {
+      line-height: 35px;
+      font-size: 18px;
+      border-bottom: 2px solid #999;
+    }
+
+    .msg-item {
+      line-height: 30px;
+      padding: 0 5px;
+    }
+
+    .hand {
+      display: inline-block;
+      width: 100px;
+    }
   }
 
   @keyframes slide {
@@ -370,5 +430,15 @@
       -o-transform: $trans-end;
       transform: $trans-end;
     }
+  }
+
+  .test {
+    background: #a6a;
+    position: relative;
+  }
+
+  .test-t {
+    background: #633;
+    position: relative;
   }
 </style>
