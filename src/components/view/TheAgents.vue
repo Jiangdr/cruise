@@ -138,22 +138,29 @@
     },
     methods: {
       addResource(obj) {
-        axios.post('http://127.0.0.1:8380/add', {
-          id: obj.id,
-          res: this.addStr,
-        }).then(({data}) => {
-          obj.resources.push(...data);
-          this.show = -1;
-        })
+        obj.resources.push(...this.addStr.replace('，', ',').split(',').filter(val => val).map(val => {
+          return {
+            label: val,
+          }
+        }));
+        this.show = -1;
+        // axios.post('http://127.0.0.1:8380/add', {
+        //   id: obj.id,
+        //   res: this.addStr,
+        // }).then(({data}) => {
+        //   obj.resources.push(...data);
+        //   this.show = -1;
+        // })
 
       },
       deleteRes(obj, id, idx) {
-        axios.post('http://127.0.0.1:8380/delete', {
-          pId: obj.id,
-          id: id,
-        }).then(({data}) => {
-          obj.resources.splice(idx, 1)
-        })
+        obj.resources.splice(idx, 1)
+        // axios.post('http://127.0.0.1:8380/delete', {
+        //   pId: obj.id,
+        //   id: id,
+        // }).then(({data}) => {
+        //   obj.resources.splice(idx, 1)
+        // })
       },
     },
     computed: {
@@ -177,7 +184,7 @@
    *组件挂载成功执行函数
    */
   function mounted() {
-    axios.post('http://127.0.0.1:8380/agent', {id: 2}).then(({data}) => {
+    axios.get('/static/data/save.json').then(({data}) => {
       this.agent = data;
     });
   }

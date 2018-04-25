@@ -1,0 +1,122 @@
+[
+  {
+    "id": "d1p5uxjg-74hq-a13",
+    "name": "bjstdmngber01.thoughtworks.com",
+    "img": "/static/imgs/github.png",
+    "tag": "building",
+    "host": "0.0.0.0",
+    "path": "/a/a/a",
+    "author": "derry",
+    "type": "physical",
+    "resources": [
+      {
+        "id": "w4l7qqbw-5p97-k3i6-",
+        "label": "aaa"
+      }
+    ]
+  },
+  {
+    "id": "vidakavc-5zzx-yh7",
+    "name": "bjstdmngber02.thoughtworks.com",
+    "img": "/static/imgs/github-1.png",
+    "tag": "building",
+    "host": "0.0.0.0",
+    "path": "/a/a/a",
+    "author": "derry",
+    "type": "virtual",
+    "resources": [
+      {
+        "id": "jai6xx7z-dsil-0swe-",
+        "label": "aaa"
+      },
+      {
+        "id": "wly4ycoj-8hm6-0wio-",
+        "label": "242424"
+      },
+      {
+        "id": "hv2p9wfz-o82m-6clw-",
+        "label": "aaa"
+      },
+      {
+        "id": "2a7g60ca-ivae-qolb-",
+        "label": "242424"
+      }
+    ]
+  },
+  {
+    "id": "r8tesqwy-sorq-ykm",
+    "name": "bjstdmngber03.thoughtworks.com",
+    "img": "/static/imgs/github.png",
+    "tag": "building",
+    "host": "0.0.0.0",
+    "path": "/a/a/a",
+    "author": "derry",
+    "type": "virtual",
+    "resources": [
+      {
+        "id": "n7lsreyu-bgg0-oiau-",
+        "label": "aaa"
+      },
+      {
+        "id": "o7eko4qf-jmjc-zagf-",
+        "label": "242424"
+      },
+      {
+        "id": "gyje31yo-i66g-19v0-",
+        "label": "aaa"
+      },
+      {
+        "id": "164il8vs-e2ho-m8il-",
+        "label": "242424"
+      }
+    ]
+  },
+  {
+    "id": "j0hvzt9a-zly5-6g3",
+    "name": "bjstdmngber04.thoughtworks.com",
+    "img": "/static/imgs/github.png",
+    "tag": "building",
+    "host": "0.0.0.0",
+    "path": "/a/a/a",
+    "author": "derry",
+    "type": "physical",
+    "resources": [
+      {
+        "id": "8gqzkaqj-9dww-4mcu-",
+        "label": "aaa"
+      },
+      {
+        "id": "tigdwcu4-hes8-u1t3-",
+        "label": "242424"
+      },
+      {
+        "id": "50ntvnyb-5dp8-y5oh-",
+        "label": "242424"
+      }
+    ]
+  },
+  {
+    "id": "uuihucyn-kyx8-pz0",
+    "name": "bjstdmngber05.thoughtworks.com",
+    "img": "/static/imgs/github.png",
+    "tag": "building",
+    "host": "0.0.0.0",
+    "path": "/a/a/a",
+    "author": "derry",
+    "type": "virtual",
+    "resources": [
+      {
+        "id": "ti7ef40k-3ryb-v6v5-",
+        "label": "aaa"
+      },
+      {
+        "id": "pvlf9xc4-zrvk-ds9g-",
+        "label": "242424"
+      },
+      {
+        "id": "aw2rih4d-34gi-z0g9-",
+        "label": "242424"
+      }
+    ]
+  }
+]
