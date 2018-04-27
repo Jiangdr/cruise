@@ -17,6 +17,9 @@
     margin: 0 auto;
     text-align: center;
     padding-top: 150px;
+    img {
+      height: 146px;
+    }
   }
   .msg {
     font-weight: 600;

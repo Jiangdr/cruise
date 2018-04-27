@@ -15,12 +15,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/index',
+      // redirect: '/index',
       name: 'Nav',
       component: Nav,
       children: [
         {
-          path: '/index',
+          path: '/',
           name: 'Home',
           component: Home,
         },
